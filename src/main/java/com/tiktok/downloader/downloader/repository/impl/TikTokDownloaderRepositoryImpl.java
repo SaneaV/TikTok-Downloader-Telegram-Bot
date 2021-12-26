@@ -27,6 +27,7 @@ public class TikTokDownloaderRepositoryImpl implements TikTokDownloaderRepositor
                 .uri(ttLoaderLink)
                 .retrieve()
                 .bodyToMono(String.class)
+                .retry(5)
                 .map(videoParser::parse)
                 .block();
     }
