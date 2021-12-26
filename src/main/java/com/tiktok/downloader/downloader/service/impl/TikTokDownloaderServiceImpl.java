@@ -23,7 +23,7 @@ import static java.lang.String.format;
 public class TikTokDownloaderServiceImpl implements TikTokDownloaderService {
 
     private static final String PATH_NAME = "Video";
-    private static final String MESSAGE_TEXT = "TikTok model(s)- [%s](https://www.tiktok.com/@%s)\n\n" +
+    private static final String MESSAGE_TEXT = "Girl's TikTok account - [%s](https://www.tiktok.com/@%s)\n\n" +
             "Instagram [Chisinau_Girls](https://www.instagram.com/chisinau_girls/)\n" +
             "Instagram [Chisinau_Topless](https://www.instagram.com/chisinau_topless/)";
 
