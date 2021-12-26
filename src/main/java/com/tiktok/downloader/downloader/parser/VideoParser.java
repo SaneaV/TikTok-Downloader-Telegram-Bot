@@ -1,9 +1,11 @@
 package com.tiktok.downloader.downloader.parser;
 
 import com.tiktok.downloader.downloader.model.TikTokVideo;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class VideoParser implements Parser {
 
@@ -15,6 +17,7 @@ public class VideoParser implements Parser {
     private static final String NICKNAME = "nickname";
 
     public TikTokVideo parse(String fullVideoInfo) {
+        log.debug("Parsing video {}.", fullVideoInfo);
         final JSONObject videoInfo = getJsonObjectFromString(fullVideoInfo);
         return parseToObject(videoInfo);
     }
