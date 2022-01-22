@@ -19,7 +19,7 @@ import static com.tiktok.downloader.bot.utils.MessageUtils.sendMessageError;
 @Slf4j
 public class TikTokDownloaderBot extends TelegramWebhookBot {
 
-    private static final String ERROR_MESSAGE = "При отправке сообщения произошла ошибка";
+    private static final String ERROR_MESSAGE = "An error occurred while sending the message";
     private static final String ERROR_MESSAGE_WRONG_URL = "Please, make sure your link looks like this:\n" +
             "https://www.tiktok.com/@test/video/000000000000\n or\n" +
             "https://vt.tiktok.com/testtest/\n";
