@@ -1,19 +1,19 @@
-package com.tiktok.downloader.bot.service;
+package com.tiktok.downloader.bot;
 
-import com.tiktok.downloader.downloader.service.TikTokDownloaderService;
+import static com.tiktok.downloader.bot.MessageUtils.sendMessageError;
+
+import com.tiktok.downloader.infrastructure.service.TikTokDownloaderService;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramWebhookBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static com.tiktok.downloader.bot.utils.MessageUtils.sendMessageError;
 
 @Component
 @Slf4j
@@ -43,6 +43,33 @@ public class TikTokDownloaderBot extends TelegramWebhookBot {
     }
 
     @Override
+    public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
+        if ((update.hasMessage() && update.getMessage().hasText())) {
+            final Message message = update.getMessage();
+            final String messageText = message.getText();
+
+            log.debug("Message from {} with content \"{}\" received.", message.getFrom().getId(), messageText);
+
+            try {
+                if (checkCorrectUrl(messageText)) {
+                    execute(tikTokDownloaderService.sendTikTok(update));
+                } else {
+                    execute(sendMessageError(message, ERROR_MESSAGE_WRONG_URL));
+                }
+            } catch (Exception exception) {
+                log.debug("TikTok Downloader exception: {}", exception.getMessage());
+                try {
+                    execute(sendMessageError(message, ERROR_MESSAGE));
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+        return null;
+    }
+
+    @Override
     public String getBotUsername() {
         return botUserName;
     }
@@ -55,32 +82,6 @@ public class TikTokDownloaderBot extends TelegramWebhookBot {
     @Override
     public String getBotPath() {
         return webHookPath;
-    }
-
-    @Override
-    public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
-        if ((update.hasMessage() && update.getMessage().hasText())) {
-            log.debug("Message from {} with content \"{}\" received.", update.getMessage().getFrom().getId(),
-                    update.getMessage().getText());
-
-            try {
-                if (checkCorrectUrl(update.getMessage().getText())) {
-                    execute(tikTokDownloaderService.sendTikTok(update));
-                } else {
-                    execute(sendMessageError(update.getMessage(), ERROR_MESSAGE_WRONG_URL));
-                }
-
-            } catch (Exception exception) {
-                log.debug("TikTok Downloader exception: {}", exception.getMessage());
-                try {
-                    execute(sendMessageError(update.getMessage(), ERROR_MESSAGE));
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }
-        return null;
     }
 
     private boolean checkCorrectUrl(String message) {

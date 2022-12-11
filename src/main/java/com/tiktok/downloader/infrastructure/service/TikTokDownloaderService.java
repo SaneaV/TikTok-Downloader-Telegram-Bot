@@ -1,4 +1,4 @@
-package com.tiktok.downloader.downloader.service;
+package com.tiktok.downloader.infrastructure.service;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendVideo;
 import org.telegram.telegrambots.meta.api.objects.Update;

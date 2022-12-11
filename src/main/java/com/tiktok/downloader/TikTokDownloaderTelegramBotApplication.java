@@ -9,5 +9,4 @@ public class TikTokDownloaderTelegramBotApplication {
     public static void main(String[] args) {
         SpringApplication.run(TikTokDownloaderTelegramBotApplication.class, args);
     }
-
 }
