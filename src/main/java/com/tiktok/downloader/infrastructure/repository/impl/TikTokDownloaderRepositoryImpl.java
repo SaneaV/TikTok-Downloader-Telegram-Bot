@@ -10,6 +10,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -18,9 +19,15 @@ import org.springframework.stereotype.Component;
 public class TikTokDownloaderRepositoryImpl implements TikTokDownloaderRepository {
 
   private static final String TIKTOK_DOWNLOAD_LINK = "https://tiktokdownload.online/abc?url=dl";
-  private static final String ID = "id";
+  private static final String ID_KEY = "id";
+  private static final String LOCALE_KEY = "locale";
+  private static final String TT_KEY = "tt";
+  private static final String LOCALE_VALUE = "en";
   private static final String AT = "@";
   private static final String SLASH = "/";
+
+  @Value("${app.tt-value}")
+  private String ttValue;
 
   private final Parser parser;
 
@@ -32,7 +39,9 @@ public class TikTokDownloaderRepositoryImpl implements TikTokDownloaderRepositor
     final Document html = Jsoup.connect(TIKTOK_DOWNLOAD_LINK)
         .timeout(10000)
         .method(POST)
-        .data(ID, link)
+        .data(ID_KEY, link)
+        .data(LOCALE_KEY, LOCALE_VALUE)
+        .data(TT_KEY, ttValue)
         .execute()
         .parse();
 

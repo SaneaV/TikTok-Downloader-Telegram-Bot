@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class HTMLParser implements Parser {
 
-  private static final String CLASS_NAME = "flex-1 result_overlay_buttons";
+  private static final String CLASS_NAME = "flex-1 result_overlay_buttons pure-u-1 pure-u-sm-1-2";
 
   @Override
   public String getVideoLink(Document document) {
